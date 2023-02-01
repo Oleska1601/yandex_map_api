@@ -10,7 +10,6 @@ SCREEN_SIZE = [600, 450]
 
 
 class StaticMap(QMainWindow, Ui_MainWindow):
-    api_server = "http://static-maps.yandex.ru/1.x/"
 
     def __init__(self):
         super().__init__()
@@ -19,6 +18,7 @@ class StaticMap(QMainWindow, Ui_MainWindow):
         self.setupUi(self)
 
     def getImage(self):
+
         self.current_ll = (37.530887, 55.703118)
         self.current_spn = (0.002, 0.002)
         self.type = 'map'
@@ -27,12 +27,12 @@ class StaticMap(QMainWindow, Ui_MainWindow):
             "spn": ",".join(map(str, self.current_ll)),
             "l": self.type
         }
-        map_request = "http://static-maps.yandex.ru/1.x/?ll=37.530887,55.703118&spn=0.002,0.002&l=map"
-        response = requests.get(map_request)
+        self.map_api_server = "http://static-maps.yandex.ru/1.x/"
+        response = requests.get(self.map_api_server, params)
 
         if not response:
             print("Ошибка выполнения запроса:")
-            print(map_request)
+            print(self.map_api_server)
             print("Http статус:", response.status_code, "(", response.reason, ")")
             sys.exit(1)
 
@@ -48,8 +48,6 @@ class StaticMap(QMainWindow, Ui_MainWindow):
         ## Изображение
         self.pixmap = QPixmap(self.map_file)
         self.image = QLabel(self)
-        self.image.move(0, 0)
-        self.image.resize(600, 450)
         self.image.setPixmap(self.pixmap)
 
     def closeEvent(self, event):
