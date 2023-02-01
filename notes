@@ -1,1 +1,2 @@
-key down event pyqt
+def keyReleasedEvent(self, event):
+  print(event.key())
